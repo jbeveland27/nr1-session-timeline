@@ -11,8 +11,37 @@
   align-items: center;
 }
 
+.search__icon {
+  padding-right: 1rem;
+}
+
 .search__input {
   width: 100%;
+}
+
+.search__selected {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.search__selected-item {
+  padding: .25rem;
+  padding-right: 0rem;
+  background-color: rgb(208, 240, 255);
+  border-radius: 3px;
+}
+
+.search__selected-remove {
+  color: #0079bf;
+  background-color: rgb(208, 240, 255);
+  padding: .25rem .5rem;
+  font-weight: bold;
+
+  &:hover {
+    background: #84d8ff;
+    color: #003555;
+  }
 }
 
 .search-autocomplete__drawer {

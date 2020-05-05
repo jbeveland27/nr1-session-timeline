@@ -90,7 +90,16 @@ export default class SearchBar extends React.Component {
   onSelectSearchItem = item => {
     const { selectFilter } = this.props
     selectFilter(item)
-    this.setState({ selectedItem: item })
+    this.setState({
+      selectedItem: item,
+      searchTerm: '',
+      results: [],
+      cachedResults: [],
+    })
+  }
+
+  onRemoveSelectedItem = () => {
+    this.setState({ selectedItem: '' })
   }
 
   render() {
@@ -100,15 +109,28 @@ export default class SearchBar extends React.Component {
       <div className="search">
         <div className="search__bar">
           <Icon
+            className="search__icon"
             type={Icon.TYPE.INTERFACE__CHEVRON__CHEVRON_RIGHT__WEIGHT_BOLD}
           />
-          <TextField
-            className="search__input"
-            onChange={this.onSearchInputChange}
-            placeholder="Start typing in a session id or user id"
-            autoFocus={true}
-            // value={selectedItem ? selectedItem : searchTerm}
-          />
+          {!selectedItem && (
+            <TextField
+              className="search__input"
+              onChange={this.onSearchInputChange}
+              placeholder="Start typing in a session id or user id"
+              autoFocus={true}
+            />
+          )}
+          {selectedItem && (
+            <div className="search__selected">
+              <div className="search__selected-item">{selectedItem}</div>
+              <div
+                className="search__selected-remove"
+                onClick={this.onRemoveSelectedItem}
+              >
+                X
+              </div>
+            </div>
+          )}
         </div>
         {!selectedItem && searchTerm && (
           <SearchBarDrawer
