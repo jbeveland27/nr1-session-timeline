@@ -102,6 +102,14 @@ export default class SearchBar extends React.Component {
     this.setState({ selectedItem: '' })
   }
 
+  onCloseSearchDrawer = () => {
+    this.setState({      searchTerm: '',
+    results: [],
+    cachedResults: [],
+    selectedItem: '',
+})
+  }
+
   render() {
     const { loading, results, searchTerm, selectedItem } = this.state
 
@@ -138,6 +146,7 @@ export default class SearchBar extends React.Component {
             results={results}
             searchTerm={searchTerm}
             select={this.onSelectSearchItem}
+            closeOnClickOutside={this.onCloseSearchDrawer}
           />
         )}
       </div>
