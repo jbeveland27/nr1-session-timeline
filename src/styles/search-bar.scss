@@ -58,8 +58,12 @@
 }
 
 .search-autocomplete__item {
-  padding: .2rem;
+  padding: .5rem;
   cursor: pointer;
+
+  &:hover {
+    background-color: rgb(237,238,238);
+  }
 }
 
 .search-autocomplete__empty {
