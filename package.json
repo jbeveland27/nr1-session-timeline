@@ -1,0 +1,31 @@
+{
+    "private": true,
+    "name": "nr1-session-timeline",
+    "version": "1.19.6",
+    "scripts": {
+        "start": "nr1 nerdpack:serve",
+        "test": "exit 0"
+    },
+    "nr1": {
+        "uuid": "cf5720c2-fa97-4e88-8016-8d55508a1cef"
+    },
+    "dependencies": {
+        "prop-types": "^15.6.2",
+        "react": "^16.6.3",
+        "react-dom": "^16.6.3"
+    },
+    "devDependencies": {
+        "babel-eslint": "^10.0.3",
+        "babel-runtime": "^6.26.0",
+        "eslint": "^6.4.0",
+        "eslint-config-prettier": "^6.3.0",
+        "eslint-plugin-prettier": "^3.1.1",
+        "eslint-plugin-react": "^7.14.3",
+        "prettier": "^1.18.2"
+    },
+    "browserslist": [
+        "last 2 versions",
+        "not ie < 11",
+        "not dead"
+    ]
+}

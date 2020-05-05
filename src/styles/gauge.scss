@@ -1,0 +1,109 @@
+.gaugeStack {
+  width: 100%;
+}
+
+.gaugeStackItem {
+  width: 100%;
+  min-height: 186px;
+}
+
+.gaugeHeader {
+  margin-bottom: 16px;
+}
+
+.Gauge {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-right: 5px;
+
+  &-gauge {
+    width: 100%;
+    display: flex;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &-legend {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+
+    &-item {
+      display: inline-flex;
+      margin-right: 1.5rem;
+      color: #464e4e;
+
+      &-dot {
+        content: '';
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        margin-top: 3px;
+        margin-right: 4px;
+
+        &.hidden {
+          margin-top: 1px;
+          border: 1px solid black;
+        }
+      }
+    }
+  }
+}
+
+.Gauge .gaugeTimeline {
+  justify-content: space-between;
+  position: relative;
+  margin-top: 8px;
+  padding-top: 8px;
+
+  &:before {
+    content: '';
+    border-top: 1px dotted #d5d7d7;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    right: 0;
+  }
+}
+
+.gaugeTimelineItem {
+  margin-top: -12px;
+  color: #8e9494;
+  width: 25px;
+  overflow: hidden;
+  text-overflow: '';
+  text-align: center;
+
+  &:first-of-type {
+    text-align: left;
+
+    &:before {
+      margin: 0px 0 4px;
+    }
+  }
+
+  &:last-of-type {
+    text-align: right;
+
+    &:before {
+      position: relative;
+      left: 12px;
+    }
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    height: 9px;
+    width: 1px;
+    background-color: #d5d7d7;
+    margin: 0px auto 3px;
+  }
+}
+
+.Gauge-legend-item {
+  &:hover {
+    cursor: pointer
+  }
+}

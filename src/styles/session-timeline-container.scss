@@ -1,0 +1,10 @@
+* {
+  box-sizing: border-box;
+  font-size: .75rem;
+}
+
+.container__grid-template {
+  height: 100%;
+  width: 100%;
+  grid-template-rows: 15% 85%;
+}
