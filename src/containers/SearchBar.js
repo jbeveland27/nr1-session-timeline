@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { TextField, NerdGraphQuery, Icon } from 'nr1'
 import SearchBarDrawer from '../components/search-bar/SearchBarDrawer'
+import config from '../config/config'
 
 export default class SearchBar extends React.Component {
   state = {
@@ -16,7 +17,8 @@ export default class SearchBar extends React.Component {
     console.info('searchBar.loadData')
 
     const { entity } = this.props
-    const nrql = `FROM PageView SELECT uniques(session) WHERE entityGuid='${entity.guid}' AND session like '%${searchTerm}%' `
+    const { attribute, event, duration } = config
+    const nrql = `FROM ${event} SELECT uniques(${attribute}) WHERE entityGuid='${entity.guid}' AND ${attribute} like '%${searchTerm}%' and session is not null ${duration} `
 
     console.debug('searchBar.loadData nrql', nrql)
 
@@ -44,7 +46,7 @@ export default class SearchBar extends React.Component {
 
     if (rawData) {
       console.debug('searchBar.loadData rawData', rawData)
-      results = rawData.actor.account.nrql.results[0]['uniques.session']
+      results = rawData.actor.account.nrql.results[0][`uniques.${attribute}`]
     }
 
     return results
@@ -99,15 +101,19 @@ export default class SearchBar extends React.Component {
   }
 
   onRemoveSelectedItem = () => {
+    console.debug('removing selected')
+    const { clearFilter } = this.props
+    clearFilter()
     this.setState({ selectedItem: '' })
   }
 
   onCloseSearchDrawer = () => {
-    this.setState({      searchTerm: '',
-    results: [],
-    cachedResults: [],
-    selectedItem: '',
-})
+    this.setState({
+      searchTerm: '',
+      results: [],
+      cachedResults: [],
+      selectedItem: '',
+    })
   }
 
   render() {
@@ -156,4 +162,6 @@ export default class SearchBar extends React.Component {
 
 SearchBar.propTypes = {
   entity: PropTypes.object.isRequired,
+  selectFilter: PropTypes.func.isRequired,
+  clearFilter: PropTypes.func.isRequired,
 }
