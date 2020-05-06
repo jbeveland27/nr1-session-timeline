@@ -8,6 +8,7 @@ import {
   TableHeaderCell,
   TableRow,
   TableRowCell,
+  HeadingText,
 } from 'nr1'
 import config from '../../config/config'
 
@@ -32,10 +33,10 @@ export default class SearchResults extends React.PureComponent {
     return (
       <Table items={data}>
         <TableHeader>
-          <TableHeaderCell className="search-results__header">
+          <TableHeaderCell className="search-results__table-header">
             Date
           </TableHeaderCell>
-          <TableHeaderCell className="search-results__header">
+          <TableHeaderCell className="search-results__table-header">
             Session
           </TableHeaderCell>
         </TableHeader>
@@ -69,13 +70,21 @@ export default class SearchResults extends React.PureComponent {
       entity: { accountId },
       selected,
     } = this.props
-    const { attribute, event, duration } = config
-    const query = `FROM ${event} SELECT uniques(session) WHERE ${attribute}='${selected}' ${duration} FACET dateOf(timestamp) `
+    const { searchAttribute, event, duration } = config
+    const query = `FROM ${event} SELECT uniques(session) WHERE ${searchAttribute}='${selected}' ${duration} FACET dateOf(timestamp) `
 
     console.debug(`searchResults accountId: ${accountId} || query: ${query}`)
 
     return (
       <div className="search-results">
+        <div>
+          <HeadingText
+            className="grid-item__header"
+            type={HeadingText.TYPE.HEADING_4}
+          >
+            Select a Session
+          </HeadingText>
+        </div>
         <NrqlQuery accountId={accountId} query={query}>
           {({ data, error, loading }) => {
             if (loading) return <Spinner fillContainer />

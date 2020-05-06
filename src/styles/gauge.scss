@@ -4,11 +4,12 @@
 
 .gaugeStackItem {
   width: 100%;
-  min-height: 186px;
+  // min-height: 186px;
+  padding-bottom: 2rem;
 }
 
 .gaugeHeader {
-  margin-bottom: 16px;
+  // margin-bottom: 16px;
 }
 
 .Gauge {
@@ -70,7 +71,7 @@
 .gaugeTimelineItem {
   margin-top: -12px;
   color: #8e9494;
-  width: 25px;
+  width: 50px;
   overflow: hidden;
   text-overflow: '';
   text-align: center;

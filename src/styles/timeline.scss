@@ -42,11 +42,7 @@
   background-color: #e4ffe3;
 }
 
-.timeline-item-type-ad .timeline-item-symbol:after {
-  background-color: #edffff;
-}
-
-.timeline-item-type-content .timeline-item-symbol:after {
+.timeline-item-type-interaction .timeline-item-symbol:after {
   background-color: #fff4d1;
 }
 
@@ -54,24 +50,8 @@
   background-color: #fcf2f3;
 }
 
-.timeline-item-type-buffer .timeline-item-symbol:after {
-  background-color: #fce8c2;
-}
-
-.timeline-item-type-rendition .timeline-item-symbol:after {
-  background-color: #d0f0ff;
-}
-
-.timeline-item-type-heartbeat .timeline-item-symbol:after {
+.timeline-item-type-ajax .timeline-item-symbol:after {
   background-color: #e8dfed;
-}
-
-.timeline-item-type-external .timeline-item-symbol:after {
-  background-color: #a5d1af;
-}
-
-.timeline-item-type-player .timeline-item-symbol:after {
-  background-color: #bdf2c6;
 }
 
 .timeline-item-type-download .timeline-item-symbol:after {
@@ -249,6 +229,7 @@
 .timeline-item-symbol-icon {
   position: relative;
   z-index: 10;
+  width: auto;
 }
 
 .timeline-item-body:after {

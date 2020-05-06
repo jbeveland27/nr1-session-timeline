@@ -5,6 +5,14 @@
 
 .container__grid-template {
   height: 100%;
-  width: 100%;
-  grid-template-rows: 2.5rem auto;
+  margin-left: .25rem;
+  grid-template-rows: 5.5rem auto;
+}
+
+.timeline-grid-item {
+  height: 100%;
+  background-color: #fff;
+  padding: .5rem;
+  border: 1px solid #e3e4e4;
+  box-shadow: 0 1px 3px 0 rgba(203, 226, 226, 0.34);
 }

@@ -10,9 +10,11 @@
         "uuid": "cf5720c2-fa97-4e88-8016-8d55508a1cef"
     },
     "dependencies": {
+        "moment": "^2.25.3",
         "prop-types": "^15.6.2",
         "react": "^16.6.3",
-        "react-dom": "^16.6.3"
+        "react-dom": "^16.6.3",
+        "react-moment": "^0.9.7"
     },
     "devDependencies": {
         "babel-eslint": "^10.0.3",

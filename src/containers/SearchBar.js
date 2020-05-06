@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TextField, NerdGraphQuery, Icon } from 'nr1'
+import { startCase } from 'lodash'
+import { TextField, NerdGraphQuery, Icon, HeadingText } from 'nr1'
 import SearchBarDrawer from '../components/search-bar/SearchBarDrawer'
 import config from '../config/config'
 
@@ -17,8 +18,8 @@ export default class SearchBar extends React.Component {
     console.info('searchBar.loadData')
 
     const { entity } = this.props
-    const { attribute, event, duration } = config
-    const nrql = `FROM ${event} SELECT uniques(${attribute}) WHERE entityGuid='${entity.guid}' AND ${attribute} like '%${searchTerm}%' and session is not null ${duration} `
+    const { searchAttribute, event, duration } = config
+    const nrql = `FROM ${event} SELECT uniques(${searchAttribute}) WHERE entityGuid='${entity.guid}' AND ${searchAttribute} like '%${searchTerm}%' and session is not null ${duration} `
 
     console.debug('searchBar.loadData nrql', nrql)
 
@@ -46,7 +47,7 @@ export default class SearchBar extends React.Component {
 
     if (rawData) {
       console.debug('searchBar.loadData rawData', rawData)
-      results = rawData.actor.account.nrql.results[0][`uniques.${attribute}`]
+      results = rawData.actor.account.nrql.results[0][`uniques.${searchAttribute}`]
     }
 
     return results
@@ -118,9 +119,16 @@ export default class SearchBar extends React.Component {
 
   render() {
     const { loading, results, searchTerm, selectedItem } = this.state
+    const { searchAttribute } = config
 
     return (
       <div className="search">
+        <HeadingText
+          className="grid-item__header"
+          type={HeadingText.TYPE.HEADING_4}
+        >
+          Search for {startCase(searchAttribute)}
+        </HeadingText>
         <div className="search__bar">
           <Icon
             className="search__icon"
@@ -130,7 +138,7 @@ export default class SearchBar extends React.Component {
             <TextField
               className="search__input"
               onChange={this.onSearchInputChange}
-              placeholder="Start typing in a session id or user id"
+              placeholder={`Start typing in a ${startCase(searchAttribute)}`}
               autoFocus={true}
             />
           )}
