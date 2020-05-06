@@ -28,18 +28,29 @@ export default class TimelineContainer extends React.Component {
 
     let result = []
     if (data && data.chart.length > 0)
-      result = data.chart[0].data.map(datum => {
-        datum['eventGroupName'] = eventType
-        return datum
+      result = data.chart[0].data.map(event => {
+        event['eventType'] = eventType
+        event['eventAction'] = this.getEventAction(event, eventType)
+        return event
       })
 
     return result
   }
 
+  getEventAction = (event, eventType) => {
+    let action = ''
+    if (eventType !== 'BrowserInteraction') action = eventType
+    else
+      action =
+        event.category === 'Custom' ? 'Custom Interaction' : event.category
+
+    return action
+  }
+
   getLegend = data => {
     const legend = []
     for (let row of data) {
-      const group = eventGroup(row.eventGroupName)
+      const group = eventGroup(row.eventAction)
       const found = legend.filter(item => item.group.name === group.name)
 
       if (found.length === 0) {
@@ -101,8 +112,6 @@ export default class TimelineContainer extends React.Component {
   render() {
     const { sessionData, loading, legend } = this.state
     const { session } = this.props
-
-    // console.debug('timelineContainer.sessionData', sessionData)
 
     return (
       <React.Fragment>

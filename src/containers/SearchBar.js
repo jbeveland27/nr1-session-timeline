@@ -46,7 +46,6 @@ export default class SearchBar extends React.Component {
     }
 
     if (rawData) {
-      console.debug('searchBar.loadData rawData', rawData)
       results = rawData.actor.account.nrql.results[0][`uniques.${searchAttribute}`]
     }
 
@@ -79,8 +78,6 @@ export default class SearchBar extends React.Component {
       loading = false
     }
 
-    console.debug('searchBar.onChange results', clonedResults)
-
     this.setState({
       results: clonedResults,
       loading: false,
@@ -102,7 +99,6 @@ export default class SearchBar extends React.Component {
   }
 
   onRemoveSelectedItem = () => {
-    console.debug('removing selected')
     const { clearFilter } = this.props
     clearFilter()
     this.setState({ selectedItem: '' })

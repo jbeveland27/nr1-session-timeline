@@ -56,7 +56,6 @@ export default class SearchResults extends React.PureComponent {
   }
 
   onChooseSession = (evt, { item, index }) => {
-    console.debug(`searchResults.onChooseSession`, item)
     const { chooseSession } = this.props
     chooseSession(item.value)
   }
@@ -76,25 +75,30 @@ export default class SearchResults extends React.PureComponent {
     console.debug(`searchResults accountId: ${accountId} || query: ${query}`)
 
     return (
-      <div className="search-results">
-        <div>
-          <HeadingText
-            className="grid-item__header"
-            type={HeadingText.TYPE.HEADING_4}
-          >
-            Select a Session
-          </HeadingText>
-        </div>
-        <NrqlQuery accountId={accountId} query={query}>
-          {({ data, error, loading }) => {
-            if (loading) return <Spinner fillContainer />
-            if (error) return <BlockText>{error.message}</BlockText>
+      <React.Fragment>
+        {!selected && <div></div>}
+        {selected && (
+          <div className="search-results">
+            <div>
+              <HeadingText
+                className="grid-item__header"
+                type={HeadingText.TYPE.HEADING_4}
+              >
+                Select a Session
+              </HeadingText>
+            </div>
+            <NrqlQuery accountId={accountId} query={query}>
+              {({ data, error, loading }) => {
+                if (loading) return <Spinner fillContainer />
+                if (error) return <BlockText>{error.message}</BlockText>
 
-            if (!data) return <div>No sessions found</div>
-            return this.createTable(this.flattenData(data))
-          }}
-        </NrqlQuery>
-      </div>
+                if (!data) return <div>No sessions found</div>
+                return this.createTable(this.flattenData(data))
+              }}
+            </NrqlQuery>
+          </div>
+        )}
+      </React.Fragment>
     )
   }
 }

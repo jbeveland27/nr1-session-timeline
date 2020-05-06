@@ -42,7 +42,11 @@
   background-color: #e4ffe3;
 }
 
-.timeline-item-type-interaction .timeline-item-symbol:after {
+.timeline-item-type-pageload .timeline-item-symbol:after {
+  background-color: #d0f0ff;
+}
+
+.timeline-item-type-routechange .timeline-item-symbol:after {
   background-color: #fff4d1;
 }
 
@@ -56,6 +60,10 @@
 
 .timeline-item-type-download .timeline-item-symbol:after {
   background-color: #add7f7;
+}
+
+.timeline-item-type-custom .timeline-item-symbol:after {
+  background-color: #bdf2c6;
 }
 
 .timeline-item-type-general .timeline-item-symbol-icon {
@@ -195,16 +203,25 @@
 
 .timeline-item-body-header {
   display: flex;
+  align-items: center;
   height: 38px;
+  min-width: 0;
 }
 
 .timeline-item-title {
   flex-grow: 1;
-  display: flex;
-  align-items: center;
   padding-left: 10px;
-  font-size: 14px;
+  font-size: .85rem;
   color: #464e4e;
+}
+
+.timeline-item-title-detail {
+  display: inline-block;
+  padding-left: .5rem;
+  // min-width: 0;
+  // white-space: nowrap;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
 }
 
 .timeline-item-symbol {

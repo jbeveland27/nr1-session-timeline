@@ -20,7 +20,6 @@ export default class Wrapper extends React.Component {
               return (
                 <EntityByGuidQuery entityGuid={nerdletUrlState.entityGuid}>
                   {({ data, loading, error }) => {
-                    console.debug("EntityByGuidQuery", [loading, data, error]); //eslint-disable-line
                     if (loading) {
                       return <Spinner fillContainer />
                     }

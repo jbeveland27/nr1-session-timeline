@@ -6,5 +6,30 @@ export default {
   groupingAttribute: 'session',
   linkingAttribute: 'browserInteractionId',
   duration: ' SINCE 1 month ago',
-  timelineEventTypes: ['BrowserInteraction', 'AjaxRequest', 'JavaScriptError'],
+  timelineEventTypes: [
+    // 'PageView',
+    'BrowserInteraction',
+    'AjaxRequest',
+    'JavaScriptError',
+  ],
+  eventTitleAttributes: [
+    { name: 'PageView', primary: 'pageUrl', truncateStart: true },
+    {
+      name: 'BrowserInteraction',
+      primary: 'actionText',
+      secondary: 'browserInteractionName',
+      truncateStart: true,
+    },
+    {
+      name: 'AjaxRequest',
+      primary: 'requestUrl',
+      truncateStart: true,
+    },
+    {
+      name: 'JavaScriptError',
+      primary: 'errorMessage',
+      secondary: 'errorClass',
+      truncateStart: false,
+    },
+  ],
 }

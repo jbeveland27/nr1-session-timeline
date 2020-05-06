@@ -2,6 +2,20 @@ import { Icon } from 'nr1'
 
 const groups = [
   {
+    name: 'PAGE_LOAD',
+    eventDisplay: {
+      class: 'timeline-item-type-pageload',
+      icon: Icon.TYPE.INTERFACE__STATE__PUBLIC,
+      label: 'Page Load',
+      color: '#02acfa',
+    },
+    timelineDisplay: {
+      color: '#02acfa',
+      label: 'Page Load',
+    },
+    actionNames: ['Initial page load', 'PageView'],
+  },
+  {
     name: 'DOWNLOAD',
     eventDisplay: {
       class: 'timeline-item-type-download',
@@ -16,18 +30,18 @@ const groups = [
     actionNames: ['DOWNLOAD'],
   },
   {
-    name: 'INTERACTION',
+    name: 'ROUTE_CHANGE',
     eventDisplay: {
-      class: 'timeline-item-type-interaction',
-      icon: Icon.TYPE.INTERFACE__OPERATIONS__SELECTION,
-      label: 'Interaction',
+      class: 'timeline-item-type-routechange',
+      icon: Icon.TYPE.HARDWARE_AND_SOFTWARE__SOFTWARE__NODE,
+      label: 'Route Change',
       color: '#9C5400',
     },
     timelineDisplay: {
       color: '#fcdd77',
-      label: 'Interaction',
+      label: 'Route Change',
     },
-    actionNames: ['BrowserInteraction'],
+    actionNames: ['Route change'],
   },
   {
     name: 'AJAX',
@@ -57,6 +71,20 @@ const groups = [
     },
     actionNames: ['JavaScriptError'],
   },
+  {
+    name: 'CUSTOM',
+    eventDisplay: {
+      class: 'timeline-item-type-custom',
+      icon: Icon.TYPE.INTERFACE__OPERATIONS__SELECTION,
+      label: 'Custom Interaction',
+      color: '#016911',
+    },
+    timelineDisplay: {
+      color: '#bdf2c6',
+      label: 'Custom Interaction',
+    },
+    actionNames: ['Custom Interaction'],
+  },
 ]
 
 const defaultGroup = {
@@ -69,7 +97,7 @@ const defaultGroup = {
   },
   timelineDisplay: {
     color: '#00496b',
-    label: 'General',
+    label: 'Uncategorized',
   },
   actionNames: [],
 }
@@ -79,7 +107,10 @@ const eventGroup = event => {
     return group.actionNames.includes(event)
   })
   if (found.length > 0) return found[0]
-  else return defaultGroup
+  else {
+    console.info('uncategorized event', event)
+    return defaultGroup
+  }
 }
 
 export default eventGroup

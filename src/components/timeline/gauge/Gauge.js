@@ -96,10 +96,6 @@ export default class Gauge extends Component {
     const displayData = this.proportionateValues()
     const timeAxisValues = this.renderTimeAxis(data)
 
-    console.debug('gauge.render data', data)
-    console.debug('gauge.render displayData', displayData)
-    console.debug('gauge.render timeAxisValues', timeAxisValues)
-
     return (
       <div className="Gauge">
         <Stack

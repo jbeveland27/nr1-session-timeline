@@ -9,14 +9,14 @@ export default class Timeline extends Component {
     let prevEvent = null
     let startTime = null
 
-    data.forEach((result) => {
+    data.forEach(result => {
       if (!prevEvent) {
         prevEvent = result
         startTime = result.timestamp
       }
 
       const value = result.timestamp - prevEvent.timestamp
-      const sessionGroup = eventGroup(prevEvent.eventGroupName)
+      const sessionGroup = eventGroup(prevEvent.eventAction)
 
       eventStream.push({
         label: sessionGroup.timelineDisplay.label,
@@ -31,7 +31,6 @@ export default class Timeline extends Component {
   }
 
   getSecondsSinceStart = (start, current) => {
-    console.debug(start, current)
     return (current - start) / 1000
   }
 

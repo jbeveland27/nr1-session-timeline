@@ -2,6 +2,7 @@ import React from 'react'
 import { Spinner, Button, Icon, Stack, StackItem } from 'nr1'
 import Moment from 'react-moment'
 import { startCase } from 'lodash'
+import config from '../../config/config'
 
 export default class EventStream extends React.Component {
   state = {
@@ -38,13 +39,37 @@ export default class EventStream extends React.Component {
     return data
   }
 
+  getTitleDetails = event => {
+    const { eventTitleAttributes } = config
+    const { primary, secondary, truncateStart } = eventTitleAttributes.filter(
+      attr => attr.name === event.eventType
+    )[0]
+
+    let value = !event[primary] ? event[secondary] : event[primary]
+    value = this.truncateTitle(value, truncateStart)
+
+    return value
+  }
+
+  truncateTitle = (original, truncateStart) => {
+    const maxLength = 60
+
+    let truncated = original
+    if (original.length > maxLength) {
+      if (truncateStart) truncated = '...' + original.slice(original.length - maxLength)
+      else truncated = original.slice(0, maxLength) + '...'
+    }
+
+    return truncated
+  }
+
   buildStream = (data, legend) => {
     const sessionEvents = []
 
     data.forEach((event, i) => {
       let legendItem = null
       for (let item of legend) {
-        if (item.group.actionNames.includes(event.eventGroupName)) {
+        if (item.group.actionNames.includes(event.eventAction)) {
           legendItem = item
           break
         }
@@ -55,7 +80,8 @@ export default class EventStream extends React.Component {
         this.state.expandedTimelineItem == i ? 'timeline-item-expanded' : ''
       const streamTimeline = this.buildStreamTimeline(event)
 
-      legendItem && legendItem.visible &&
+      legendItem &&
+        legendItem.visible &&
         sessionEvents.push(
           <div
             key={i}
@@ -68,7 +94,7 @@ export default class EventStream extends React.Component {
                 <Moment format="MM/DD/YYYY" date={date} />
               </span>
               <span className="timeline-timestamp-time">
-                <Moment format="h:mm:ss:SS a" date={date} />
+                <Moment format="h:mm:ss.SSS a" date={date} />
               </span>
             </div>
             <div className="timeline-item-dot"></div>
@@ -81,7 +107,9 @@ export default class EventStream extends React.Component {
                     color={legendItem.group.eventDisplay.color}
                   ></Icon>
                 </div>
-                <div className="timeline-item-title">{startCase(event.eventGroupName)}</div>
+                <div className="timeline-item-title">
+                  {startCase(event.eventAction)}: <span className="timeline-item-title-detail">{this.getTitleDetails(event)}</span>
+                </div>
                 <Button
                   className="timeline-item-dropdown-arrow"
                   type={Button.TYPE.PLAIN_NEUTRAL}
