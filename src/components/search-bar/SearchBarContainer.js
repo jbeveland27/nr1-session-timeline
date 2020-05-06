@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { startCase } from 'lodash'
 import { TextField, NerdGraphQuery, Icon, HeadingText } from 'nr1'
-import SearchBarDrawer from '../components/search-bar/SearchBarDrawer'
-import config from '../config/config'
+import SearchBarDrawer from './SearchBarDrawer'
+import config from '../../config/config'
 
-export default class SearchBar extends React.Component {
+export default class SearchBarContainer extends React.Component {
   state = {
     loading: true,
     searchTerm: '',
@@ -164,7 +164,7 @@ export default class SearchBar extends React.Component {
   }
 }
 
-SearchBar.propTypes = {
+SearchBarContainer.propTypes = {
   entity: PropTypes.object.isRequired,
   selectFilter: PropTypes.func.isRequired,
   clearFilter: PropTypes.func.isRequired,

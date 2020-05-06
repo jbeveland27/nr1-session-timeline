@@ -7,7 +7,7 @@ import {
   BlockText,
   Spinner,
 } from 'nr1'
-import SessionTimeline from '../../src/containers/SessionTimeline'
+import SessionTimelineContainer from './SessionTimelineContainer'
 
 export default class Wrapper extends React.Component {
   render() {
@@ -33,7 +33,7 @@ export default class Wrapper extends React.Component {
                       data.entities[0].guid
                     ) {
                       return (
-                        <SessionTimeline
+                        <SessionTimelineContainer
                           launcherUrlState={platformUrlState}
                           nerdletUrlState={nerdletUrlState}
                           entity={data.entities[0]}

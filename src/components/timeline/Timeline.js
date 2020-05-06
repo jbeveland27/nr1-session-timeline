@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Stack, StackItem, Spinner } from 'nr1'
-import Gauge from './gauge/Gauge'
+import Gauge from '../gauge/Gauge'
 import eventGroup from './EventGroup'
 
 export default class Timeline extends Component {

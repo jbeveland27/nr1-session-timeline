@@ -2,10 +2,10 @@ import React from 'react'
 
 import { NrqlQuery, HeadingText } from 'nr1'
 import { sortBy } from 'lodash'
-import EventStream from '../components/timeline/EventStream'
-import Timeline from '../components/timeline/Timeline'
-import eventGroup from '../components/timeline/EventGroup'
-import config from '../config/config'
+import EventStream from './EventStream'
+import Timeline from './Timeline'
+import eventGroup from './EventGroup'
+import config from '../../config/config'
 
 export default class TimelineContainer extends React.Component {
   state = {

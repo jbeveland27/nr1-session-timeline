@@ -1,12 +1,12 @@
 import React from 'react'
 import { Grid, GridItem, HeadingText } from 'nr1'
 import { startCase } from 'lodash'
-import SearchBar from './SearchBar'
-import SearchResults from '../components/search-results/SearchResults'
-import TimelineContainer from './TimelineContainer'
-import config from '../config/config'
+import SearchBarContainer from '../../src/components/search-bar/SearchBarContainer'
+import SearchResults from '../../src/components/search-results/SearchResults'
+import TimelineContainer from '../../src/components/timeline/TimelineContainer'
+import config from '../../src/config/config'
 
-export default class SessionTimeline extends React.PureComponent {
+export default class SessionTimelineContainer extends React.PureComponent {
   state = {
     filter: '',
     session: '',
@@ -32,7 +32,7 @@ export default class SessionTimeline extends React.PureComponent {
     return (
       <Grid className="container__grid-template">
         <GridItem className="timeline-grid-item" columnStart={1} columnEnd={12}>
-          <SearchBar
+          <SearchBarContainer
             entity={entity}
             selectFilter={this.onSelectFilter}
             clearFilter={this.onClearFilter}
