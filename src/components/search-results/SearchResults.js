@@ -61,16 +61,13 @@ export default class SearchResults extends React.PureComponent {
   }
 
   render() {
-    const obj = {
-      name: 'one',
-      other: 'two',
-    }
     const {
       entity: { accountId },
       selected,
+      duration,
     } = this.props
-    const { searchAttribute, event, duration } = config
-    const query = `FROM ${event} SELECT uniques(session) WHERE ${searchAttribute}='${selected}' ${duration} FACET dateOf(timestamp) `
+    const { searchAttribute, event } = config
+    const query = `FROM ${event} SELECT uniques(session) WHERE ${searchAttribute}='${selected}' ${duration.since} FACET dateOf(timestamp) `
 
     console.debug(`searchResults accountId: ${accountId} || query: ${query}`)
 
@@ -107,4 +104,5 @@ SearchResults.propTypes = {
   entity: PropTypes.object.isRequired,
   selected: PropTypes.string.isRequired,
   chooseSession: PropTypes.func.isRequired,
+  duration: PropTypes.object.isRequired,
 }

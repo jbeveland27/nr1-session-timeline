@@ -15,11 +15,11 @@ export default class SearchBarContainer extends React.Component {
   }
 
   loadData = async searchTerm => {
-    console.info('searchBar.loadData')
+    console.debug('searchBar.loadData')
 
-    const { entity } = this.props
-    const { searchAttribute, event, duration } = config
-    const nrql = `FROM ${event} SELECT uniques(${searchAttribute}) WHERE entityGuid='${entity.guid}' AND ${searchAttribute} like '%${searchTerm}%' and session is not null ${duration} `
+    const { entity, duration } = this.props
+    const { searchAttribute, event } = config
+    const nrql = `FROM ${event} SELECT uniques(${searchAttribute}) WHERE entityGuid='${entity.guid}' AND ${searchAttribute} like '%${searchTerm}%' and session is not null ${duration.since} `
 
     console.debug('searchBar.loadData nrql', nrql)
 
@@ -53,7 +53,7 @@ export default class SearchBarContainer extends React.Component {
   }
 
   loadFromCache = async searchTerm => {
-    console.info('searchBar.loadFromCache')
+    console.debug('searchBar.loadFromCache')
     return this.state.cachedResults.filter(result =>
       result.includes(searchTerm)
     )
@@ -168,4 +168,5 @@ SearchBarContainer.propTypes = {
   entity: PropTypes.object.isRequired,
   selectFilter: PropTypes.func.isRequired,
   clearFilter: PropTypes.func.isRequired,
+  duration: PropTypes.object.isRequired,
 }

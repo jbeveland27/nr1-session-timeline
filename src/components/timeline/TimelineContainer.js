@@ -1,5 +1,5 @@
 import React from 'react'
-
+import PropTypes from 'prop-types'
 import { NrqlQuery, HeadingText } from 'nr1'
 import { sortBy } from 'lodash'
 import EventStream from './EventStream'
@@ -18,10 +18,11 @@ export default class TimelineContainer extends React.Component {
     const {
       entity: { accountId },
       session,
+      duration,
     } = this.props
-    const { groupingAttribute, duration } = config
+    const { groupingAttribute } = config
 
-    const query = `SELECT * from ${eventType} WHERE ${groupingAttribute} = '${session}' ORDER BY timestamp ASC LIMIT 1000 ${duration}`
+    const query = `SELECT * from ${eventType} WHERE ${groupingAttribute} = '${session}' ORDER BY timestamp ASC LIMIT 1000 ${duration.since}`
     console.debug('timelineDetail.query', query)
 
     const { data } = await NrqlQuery.query({ accountId, query })
@@ -145,4 +146,10 @@ export default class TimelineContainer extends React.Component {
       </React.Fragment>
     )
   }
+}
+
+TimelineContainer.propTypes = {
+  entity: PropTypes.object.isRequired,
+  session: PropTypes.string.isRequired,
+  duration: PropTypes.object.isRequired,
 }

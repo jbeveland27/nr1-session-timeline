@@ -5,6 +5,7 @@ import SearchBarContainer from '../../src/components/search-bar/SearchBarContain
 import SearchResults from '../../src/components/search-results/SearchResults'
 import TimelineContainer from '../../src/components/timeline/TimelineContainer'
 import config from '../../src/config/config'
+import { formatSinceAndCompare } from '../../src/components/utils/nrql-formatter'
 
 export default class SessionTimelineContainer extends React.PureComponent {
   state = {
@@ -25,15 +26,20 @@ export default class SessionTimelineContainer extends React.PureComponent {
   }
 
   render() {
-    const { entity } = this.props
+    const {
+      entity,
+      launcherUrlState: { timeRange },
+    } = this.props
     const { filter, session } = this.state
     const { searchAttribute } = config
+    const duration = formatSinceAndCompare(timeRange)
 
     return (
       <Grid className="container__grid-template">
         <GridItem className="timeline-grid-item" columnStart={1} columnEnd={12}>
           <SearchBarContainer
             entity={entity}
+            duration={duration}
             selectFilter={this.onSelectFilter}
             clearFilter={this.onClearFilter}
           />
@@ -50,11 +56,16 @@ export default class SessionTimelineContainer extends React.PureComponent {
               <SearchResults
                 entity={entity}
                 selected={filter}
+                duration={duration}
                 chooseSession={this.onChooseSession}
               />
             </GridItem>
             <GridItem className="timeline-grid-item" columnSpan={8}>
-              <TimelineContainer entity={entity} session={session} />
+              <TimelineContainer
+                entity={entity}
+                session={session}
+                duration={duration}
+              />
             </GridItem>
           </React.Fragment>
         )}
