@@ -46,7 +46,8 @@ export default class SearchBarContainer extends React.Component {
     }
 
     if (rawData) {
-      results = rawData.actor.account.nrql.results[0][`uniques.${searchAttribute}`]
+      results =
+        rawData.actor.account.nrql.results[0][`uniques.${searchAttribute}`]
     }
 
     return results
