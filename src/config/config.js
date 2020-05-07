@@ -5,7 +5,6 @@ export default {
   event: 'BrowserInteraction',
   groupingAttribute: 'session',
   linkingAttribute: 'browserInteractionId',
-  duration: ' SINCE 1 month ago',
   timelineEventTypes: [
     // 'PageView',
     'BrowserInteraction',
