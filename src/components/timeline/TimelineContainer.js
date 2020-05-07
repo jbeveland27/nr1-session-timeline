@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NrqlQuery, HeadingText } from 'nr1'
+import { NrqlQuery, HeadingText, Spinner } from 'nr1'
 import { sortBy } from 'lodash'
 import EventStream from './EventStream'
 import Timeline from './Timeline'
@@ -132,7 +132,12 @@ export default class TimelineContainer extends React.Component {
             </div>
           </div>
         )}
-        {session && (
+        {session && loading && (
+          <div className="timeline-container">
+            <Spinner />
+          </div>
+        )}
+        {session && !loading && (
           <React.Fragment>
             <Timeline
               data={sessionData}
