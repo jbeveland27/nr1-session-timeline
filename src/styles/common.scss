@@ -2,6 +2,11 @@
   padding: .5rem .25rem .75rem .25rem;
 }
 
+.stack__header {
+  padding: .5rem 0;
+  border-bottom: 1px solid;
+}
+
 .empty-state {
   height: 100%;
   box-sizing: border-box;

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NrqlQuery, HeadingText, Spinner } from 'nr1'
-import { sortBy } from 'lodash'
+import { NrqlQuery, HeadingText, Stack, StackItem, Spinner } from 'nr1'
+import { sortBy, startCase } from 'lodash'
 import EventStream from './EventStream'
 import Timeline from './Timeline'
 import eventGroup from './EventGroup'
@@ -15,11 +15,7 @@ export default class TimelineContainer extends React.Component {
   }
 
   getData = async eventType => {
-    const {
-      entity: { accountId },
-      session,
-      duration,
-    } = this.props
+    const { accountId, session, duration } = this.props
     const { groupingAttribute } = config
 
     const query = `SELECT * from ${eventType} WHERE ${groupingAttribute} = '${session}' ORDER BY timestamp ASC LIMIT 1000 ${duration.since}`
@@ -97,6 +93,7 @@ export default class TimelineContainer extends React.Component {
     const prevSession = prevProps.session
 
     if (session && session !== prevSession) {
+      this.setState({ loading: true })
       const { timelineEventTypes } = config
       let data = []
       for (let eventType of timelineEventTypes) {
@@ -112,7 +109,8 @@ export default class TimelineContainer extends React.Component {
 
   render() {
     const { sessionData, loading, legend } = this.state
-    const { session } = this.props
+    const { session, filter } = this.props
+    const { searchAttribute } = config
 
     return (
       <React.Fragment>
@@ -138,15 +136,33 @@ export default class TimelineContainer extends React.Component {
           </div>
         )}
         {session && !loading && (
-          <React.Fragment>
-            <Timeline
-              data={sessionData}
-              loading={loading}
-              legend={legend}
-              legendClick={this.onClickLegend}
-            />
-            <EventStream data={sessionData} loading={loading} legend={legend} />
-          </React.Fragment>
+          <Stack
+            directionType={Stack.DIRECTION_TYPE.VERTICAL}
+            horizontalType={Stack.HORIZONTAL_TYPE.CENTER}
+            fullHeight
+            fullWidth
+          >
+            <StackItem className="timeline__stack-item stack__header">
+              <div>
+                <HeadingText type={HeadingText.TYPE.HEADING_3}>
+                  Viewing Session {session}} for {startCase(searchAttribute)} {filter}
+                </HeadingText>
+              </div>
+            </StackItem>
+            <StackItem grow className="timeline__stack-item">
+              <Timeline
+                data={sessionData}
+                loading={loading}
+                legend={legend}
+                legendClick={this.onClickLegend}
+              />
+              <EventStream
+                data={sessionData}
+                loading={loading}
+                legend={legend}
+              />
+            </StackItem>
+          </Stack>
         )}
       </React.Fragment>
     )
@@ -154,7 +170,8 @@ export default class TimelineContainer extends React.Component {
 }
 
 TimelineContainer.propTypes = {
-  entity: PropTypes.object.isRequired,
+  accountId: PropTypes.number.isRequired,
   session: PropTypes.string.isRequired,
+  filter: PropTypes.string.isRequired,
   duration: PropTypes.object.isRequired,
 }

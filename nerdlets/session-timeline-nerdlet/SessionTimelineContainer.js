@@ -62,7 +62,8 @@ export default class SessionTimelineContainer extends React.PureComponent {
             </GridItem>
             <GridItem className="timeline-grid-item" columnSpan={8}>
               <TimelineContainer
-                entity={entity}
+                accountId={entity.accountId}
+                filter={filter}
                 session={session}
                 duration={duration}
               />
