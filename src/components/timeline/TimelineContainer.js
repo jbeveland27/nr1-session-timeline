@@ -26,9 +26,19 @@ export default class TimelineContainer extends React.Component {
     let result = []
     if (data && data.chart.length > 0)
       result = data.chart[0].data.map(event => {
-        event['eventType'] = eventType
-        event['eventAction'] = this.getEventAction(event, eventType)
-        return event
+        const cleanedEvent = Object.keys(event).reduce((cleaned, key) => {
+          if (!key.startsWith('nr.')) {
+            cleaned[key] = event[key]
+          }
+          return cleaned
+        }, {})
+
+        cleanedEvent['eventType'] = eventType
+        cleanedEvent['eventAction'] = this.getEventAction(
+          cleanedEvent,
+          eventType
+        )
+        return cleanedEvent
       })
 
     return result
@@ -145,7 +155,8 @@ export default class TimelineContainer extends React.Component {
             <StackItem className="timeline__stack-item stack__header">
               <div>
                 <HeadingText type={HeadingText.TYPE.HEADING_3}>
-                  Viewing Session {session}} for {startCase(searchAttribute)} {filter}
+                  Viewing Session {session}} for {startCase(searchAttribute)}{' '}
+                  {filter}
                 </HeadingText>
               </div>
             </StackItem>
