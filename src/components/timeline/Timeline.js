@@ -14,6 +14,7 @@ export default class Timeline extends React.PureComponent {
         prevEvent = result
         startTime = result.timestamp
       }
+
       const value = result.timestamp - prevEvent.timestamp
       const sessionGroup = eventGroup(result.eventAction)
       const eventStreamItem = {
@@ -26,8 +27,6 @@ export default class Timeline extends React.PureComponent {
       eventStream.push(eventStreamItem)
       prevEvent = result
     })
-
-    // console.info('buildGauge.eventStream', eventStream)
 
     return eventStream
   }

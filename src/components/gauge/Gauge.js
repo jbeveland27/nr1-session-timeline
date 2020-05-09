@@ -110,7 +110,7 @@ export default class Gauge extends Component {
         >
           <StackItem grow>
             <div className="grid-item__header">
-              <h4>Session breakdown</h4>
+              <h4>Session Sequence of Events</h4>
             </div>
           </StackItem>
         </Stack>

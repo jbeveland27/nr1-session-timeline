@@ -23,7 +23,6 @@ export default class SessionTimelineContainer extends React.PureComponent {
   }
 
   onChooseSession = (sessionDate, session) => {
-    console.info('sessionContainer.onChooseSession sessionDate', sessionDate)
     this.setState({ sessionDate, session })
   }
 

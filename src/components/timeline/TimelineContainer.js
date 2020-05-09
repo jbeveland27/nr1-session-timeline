@@ -220,7 +220,7 @@ export default class TimelineContainer extends React.Component {
       warningCount,
       showWarningsOnly,
     } = this.state
-    const { session, filter } = this.props
+    const { session, sessionDate, filter } = this.props
     const { searchAttribute } = config
 
     return (
@@ -257,7 +257,7 @@ export default class TimelineContainer extends React.Component {
               <div>
                 <HeadingText type={HeadingText.TYPE.HEADING_3}>
                   Viewing Session {session} for {startCase(searchAttribute)}{' '}
-                  {filter}
+                  {filter} ({sessionDate})
                 </HeadingText>
               </div>
             </StackItem>

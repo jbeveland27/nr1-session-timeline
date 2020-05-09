@@ -3,13 +3,15 @@ export default {
   event: 'BrowserInteraction', // the root event to build the event sream from - mandatory
   groupingAttribute: 'session', // the attribute to group events - mandatory
   linkingAttribute: 'browserInteractionId', // the attribute to use to identify related events - optional, will use groupingAttribute if not present
-  timelineEventTypes: [ // the events to include in the resulting event stream - must include at least one eventType
+  timelineEventTypes: [
+    // the events to include in the resulting event stream - must include at least one eventType
     // 'PageView',
     'BrowserInteraction',
     'AjaxRequest',
     'JavaScriptError',
   ],
-  eventTitleAttributes: [ // attributes to include as additional info in the event stream segment headers; optional
+  eventTitleAttributes: [
+    // attributes to include as additional info in the event stream segment headers; optional
     { name: 'PageView', primary: 'pageUrl', truncateStart: true },
     {
       name: 'BrowserInteraction',
@@ -29,10 +31,14 @@ export default {
       truncateStart: false,
     },
   ],
-  eventThresholds: [ // event stream results will be evaluated against this set of thresholds
+  eventThresholds: [
+    // event stream results will be evaluated against this set of thresholds
     {
       eventType: 'AjaxRequest',
-      thresholds: [{ attribute: 'timeToLastCallbackEnd', threshold: 2 }],
+      thresholds: [
+        { attribute: 'timeToSettle', threshold: 3 },
+        { attribute: 'timeSinceBrowserInteractionStart', threshold: 5 },
+      ],
     },
     {
       eventType: 'BrowserInteraction',
@@ -47,13 +53,7 @@ export default {
           categoryAttribute: 'category',
           categoryValue: 'Initial page load',
           attribute: 'timeToDomComplete',
-          threshold: 10,
-        },
-        {
-          categoryAttribute: 'category',
-          categoryValue: 'Route change',
-          attribute: 'duration',
-          threshold: 8,
+          threshold: 5,
         },
       ],
     },
