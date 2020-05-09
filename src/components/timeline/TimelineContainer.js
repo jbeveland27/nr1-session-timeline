@@ -22,6 +22,7 @@ export default class TimelineContainer extends React.Component {
       entity: { guid, accountId },
       filter,
       session,
+      sessionDate,
       duration,
     } = this.props
     const { searchAttribute, groupingAttribute, linkingAttribute } = config
@@ -40,7 +41,7 @@ export default class TimelineContainer extends React.Component {
       }
     }
 
-    const query = `SELECT * from ${eventType} WHERE entityGuid = '${guid}' and ${attributeClause} ORDER BY timestamp ASC LIMIT MAX ${duration.since}`
+    const query = `SELECT * from ${eventType} WHERE entityGuid = '${guid}' and dateOf(timestamp) = '${sessionDate}' and ${attributeClause} ORDER BY timestamp ASC LIMIT MAX ${duration.since}`
     console.debug('timelineDetail.query', query)
 
     const { data } = await NrqlQuery.query({ accountId, query })
@@ -69,11 +70,12 @@ export default class TimelineContainer extends React.Component {
       entity: { guid, accountId },
       filter,
       session,
+      sessionDate,
       duration,
     } = this.props
     const { searchAttribute, groupingAttribute, linkingAttribute } = config
 
-    const query = `SELECT uniques(${linkingAttribute}) from ${eventType} WHERE entityGuid = '${guid}' and ${groupingAttribute} = '${session}' AND ${searchAttribute} = '${filter}' LIMIT MAX ${duration.since}`
+    const query = `SELECT uniques(${linkingAttribute}) from ${eventType} WHERE entityGuid = '${guid}' and dateOf(timestamp) = '${sessionDate}' and ${groupingAttribute} = '${session}' AND ${searchAttribute} = '${filter}' LIMIT MAX ${duration.since}`
     console.debug('timelineDetail.linkingQuery', query)
 
     const { data } = await NrqlQuery.query({ accountId, query })
@@ -173,10 +175,15 @@ export default class TimelineContainer extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const { session } = this.props
+    const { session, sessionDate } = this.props
     const prevSession = prevProps.session
+    const prevSessionDate = prevProps.sessionDate
 
-    if (session && session !== prevSession) {
+    if (
+      session &&
+      (session !== prevSession ||
+        (session === prevSession && sessionDate != prevSessionDate))
+    ) {
       this.setState({ loading: true })
       const { timelineEventTypes } = config
       let data = []
@@ -300,6 +307,7 @@ export default class TimelineContainer extends React.Component {
 TimelineContainer.propTypes = {
   entity: PropTypes.object.isRequired,
   session: PropTypes.string.isRequired,
+  sessionDate: PropTypes.string.isRequired,
   filter: PropTypes.string.isRequired,
   duration: PropTypes.object.isRequired,
 }

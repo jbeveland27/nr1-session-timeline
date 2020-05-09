@@ -11,6 +11,7 @@ export default class SessionTimelineContainer extends React.PureComponent {
   state = {
     filter: '',
     session: '',
+    sessionDate: '',
   }
 
   onSelectFilter = filter => {
@@ -18,11 +19,12 @@ export default class SessionTimelineContainer extends React.PureComponent {
   }
 
   onClearFilter = () => {
-    this.setState({ filter: '', session: '' })
+    this.setState({ filter: '', session: '', sessionDate: '' })
   }
 
-  onChooseSession = session => {
-    this.setState({ session })
+  onChooseSession = (sessionDate, session) => {
+    console.info('sessionContainer.onChooseSession sessionDate', sessionDate)
+    this.setState({ sessionDate, session })
   }
 
   render() {
@@ -30,7 +32,7 @@ export default class SessionTimelineContainer extends React.PureComponent {
       entity,
       launcherUrlState: { timeRange },
     } = this.props
-    const { filter, session } = this.state
+    const { filter, session, sessionDate } = this.state
     const { searchAttribute } = config
     const duration = formatSinceAndCompare(timeRange)
 
@@ -65,6 +67,7 @@ export default class SessionTimelineContainer extends React.PureComponent {
                 entity={entity}
                 filter={filter}
                 session={session}
+                sessionDate={sessionDate}
                 duration={duration}
               />
             </GridItem>

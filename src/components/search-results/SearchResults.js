@@ -57,7 +57,7 @@ export default class SearchResults extends React.PureComponent {
 
   onChooseSession = (evt, { item, index }) => {
     const { chooseSession } = this.props
-    chooseSession(item.value)
+    chooseSession(item.date, item.value)
   }
 
   render() {
