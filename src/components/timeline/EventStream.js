@@ -75,7 +75,8 @@ export default class EventStream extends React.Component {
           {conditions.map((c, idx) => {
             return (
               <li key={idx} className="warning-condition">
-                {c.attribute} &gt; {c.threshold}
+                {c.attribute} &gt; {c.threshold} 
+                <span className="warning-condition__actual-value ">[this event: {c.actual}]</span>
               </li>
             )
           })}
@@ -171,8 +172,6 @@ export default class EventStream extends React.Component {
 
   render() {
     const { data, loading, legend } = this.props
-
-    console.debug('eventstream data', data)
 
     const stream = this.buildStream(data, legend)
 

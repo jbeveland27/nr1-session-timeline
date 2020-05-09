@@ -107,7 +107,8 @@ export default class TimelineContainer extends React.Component {
           (categoryAttribute && event[categoryAttribute] === categoryValue)
         ) {
           if (event[attribute] > threshold) {
-            warnings.push({ attribute, threshold })
+            const actual = event[attribute]
+            warnings.push({ attribute, threshold, actual })
           }
         }
       }
@@ -207,6 +208,7 @@ export default class TimelineContainer extends React.Component {
         legend,
         warnings,
         warningCount,
+        showWarningsOnly: false,
       })
     }
   }
