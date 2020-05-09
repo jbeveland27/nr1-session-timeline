@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NrqlQuery, HeadingText, Stack, StackItem, Spinner } from 'nr1'
+import { NrqlQuery, HeadingText, Stack, StackItem, Spinner, Button } from 'nr1'
 import { sortBy, startCase } from 'lodash'
 import EventStream from './EventStream'
 import Timeline from './Timeline'
@@ -12,6 +12,9 @@ export default class TimelineContainer extends React.Component {
     sessionData: [],
     loading: true,
     legend: [],
+    warnings: false,
+    warningCount: 0,
+    showWarningsOnly: false,
   }
 
   getData = async eventType => {
@@ -23,25 +26,50 @@ export default class TimelineContainer extends React.Component {
 
     const { data } = await NrqlQuery.query({ accountId, query })
 
+    let totalWarnings = 0
     let result = []
     if (data && data.chart.length > 0)
       result = data.chart[0].data.map(event => {
-        const cleanedEvent = Object.keys(event).reduce((cleaned, key) => {
-          if (!key.startsWith('nr.')) {
-            cleaned[key] = event[key]
-          }
-          return cleaned
-        }, {})
+        event['eventType'] = eventType
+        event['eventAction'] = this.getEventAction(event, eventType)
 
-        cleanedEvent['eventType'] = eventType
-        cleanedEvent['eventAction'] = this.getEventAction(
-          cleanedEvent,
-          eventType
-        )
-        return cleanedEvent
+        const warnings = this.getWarningConditions(event, eventType)
+        if (warnings && warnings.length > 0) {
+          event['nr.warnings'] = true
+          event['nr.warningConditions'] = warnings
+          totalWarnings++
+        }
+        return event
       })
 
-    return result
+    return { result, totalWarnings }
+  }
+
+  getWarningConditions = (event, eventType) => {
+    const { eventThresholds } = config
+    const thresholds = eventThresholds.filter(
+      threshold => threshold.eventType === eventType
+    )
+
+    let warnings = []
+    if (thresholds && thresholds.length > 0) {
+      for (let {
+        categoryAttribute,
+        categoryValue,
+        attribute,
+        threshold,
+      } of thresholds[0].thresholds) {
+        if (
+          !categoryAttribute ||
+          (categoryAttribute && event[categoryAttribute] === categoryValue)
+        ) {
+          if (event[attribute] > threshold) {
+            warnings.push({ attribute, threshold })
+          }
+        }
+      }
+    }
+    return warnings
   }
 
   getEventAction = (event, eventType) => {
@@ -98,6 +126,11 @@ export default class TimelineContainer extends React.Component {
     this.setState({ legend })
   }
 
+  onToggleWarnings = () => {
+    const { showWarningsOnly } = this.state
+    this.setState({ showWarningsOnly: !showWarningsOnly })
+  }
+
   async componentDidUpdate(prevProps) {
     const { session } = this.props
     const prevSession = prevProps.session
@@ -106,19 +139,39 @@ export default class TimelineContainer extends React.Component {
       this.setState({ loading: true })
       const { timelineEventTypes } = config
       let data = []
+      let warnings = false
+      let warningCount = 0
       for (let eventType of timelineEventTypes) {
-        data = data.concat(await this.getData(eventType))
+        const { result, totalWarnings } = await this.getData(eventType)
+        data = data.concat(result)
+        if (totalWarnings > 0) {
+          warnings = true
+          warningCount += totalWarnings
+        }
       }
 
       data = sortBy(data, 'timestamp')
 
       const legend = this.getLegend(data)
-      this.setState({ sessionData: data, loading: false, legend })
+      this.setState({
+        sessionData: data,
+        loading: false,
+        legend,
+        warnings,
+        warningCount,
+      })
     }
   }
 
   render() {
-    const { sessionData, loading, legend } = this.state
+    const {
+      sessionData,
+      loading,
+      legend,
+      warnings,
+      warningCount,
+      showWarningsOnly,
+    } = this.state
     const { session, filter } = this.props
     const { searchAttribute } = config
 
@@ -155,7 +208,7 @@ export default class TimelineContainer extends React.Component {
             <StackItem className="timeline__stack-item stack__header">
               <div>
                 <HeadingText type={HeadingText.TYPE.HEADING_3}>
-                  Viewing Session {session}} for {startCase(searchAttribute)}{' '}
+                  Viewing Session {session} for {startCase(searchAttribute)}{' '}
                   {filter}
                 </HeadingText>
               </div>
@@ -166,11 +219,34 @@ export default class TimelineContainer extends React.Component {
                 loading={loading}
                 legend={legend}
                 legendClick={this.onClickLegend}
+                showWarningsOnly={showWarningsOnly}
               />
+              {warnings && (
+                <div className="timline__warning">
+                  <div className="timeline__warning-alert">
+                    We found {warningCount} segments that violated expected 
+                    performance thresholds.
+                  </div>
+                  {/* <div
+                    className="timeline__warning-button"
+                    onClick={this.onToggleWarnings}
+                  > */}
+                  <Button
+                    className="timeline__warning-button"
+                    onClick={this.onToggleWarnings}
+                    type={Button.TYPE.NORMAL}
+                  >
+                    {showWarningsOnly && 'Show all events'}
+                    {!showWarningsOnly && 'Show violations only'}
+                  </Button>
+                  {/* </div> */}
+                </div>
+              )}
               <EventStream
                 data={sessionData}
                 loading={loading}
                 legend={legend}
+                showWarningsOnly={showWarningsOnly}
               />
             </StackItem>
           </Stack>

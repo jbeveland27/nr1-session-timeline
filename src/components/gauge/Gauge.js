@@ -47,17 +47,22 @@ export default class Gauge extends Component {
       return acc
     }, 0)
 
-    return data.map(({ value, label, color }, index) => {
+    return data.map(({ value, label, color, warnings }, index) => {
       const displayColor = color || this.generateColor(index, data.length)
       const proportionateValue = (value * 100) / totalValue
+      const { showWarningsOnly } = this.props
 
       let visible = true
-      for (let legendItem of legend) {
-        if (legendItem.group.timelineDisplay.label === label) {
-          visible = legendItem.visible
-          break
+
+      if (showWarningsOnly && !warnings) visible = false
+      if (visible)
+        for (let legendItem of legend) {
+          if (legendItem.group.timelineDisplay.label === label) {
+            visible = legendItem.visible
+            break
+          }
         }
-      }
+
       return {
         value: proportionateValue,
         label,

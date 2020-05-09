@@ -1,4 +1,5 @@
 import { startCase } from 'lodash'
+import { duration } from 'moment'
 
 export default {
   searchAttribute: 'userId',
@@ -29,6 +30,35 @@ export default {
       primary: 'errorMessage',
       secondary: 'errorClass',
       truncateStart: false,
+    },
+  ],
+  eventThresholds: [
+    {
+      eventType: 'AjaxRequest',
+      thresholds: [{ attribute: 'timeToLastCallbackEnd', threshold: 2 }],
+    },
+    {
+      eventType: 'BrowserInteraction',
+      thresholds: [
+        {
+          categoryAttribute: 'category',
+          categoryValue: 'Initial page load',
+          attribute: 'firstContentfulPaint',
+          threshold: 2,
+        },
+        {
+          categoryAttribute: 'category',
+          categoryValue: 'Initial page load',
+          attribute: 'timeToDomComplete',
+          threshold: 10,
+        },
+        {
+          categoryAttribute: 'category',
+          categoryValue: 'Route change',
+          attribute: 'duration',
+          threshold: 8,
+        },
+      ],
     },
   ],
 }

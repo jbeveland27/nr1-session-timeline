@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Stack, StackItem, Spinner } from 'nr1'
 import Gauge from '../gauge/Gauge'
 import eventGroup from './EventGroup'
 
-export default class Timeline extends Component {
+export default class Timeline extends React.PureComponent {
   buildGauge(data) {
     const eventStream = []
     let prevEvent = null
@@ -14,18 +14,20 @@ export default class Timeline extends Component {
         prevEvent = result
         startTime = result.timestamp
       }
-
       const value = result.timestamp - prevEvent.timestamp
-      const sessionGroup = eventGroup(prevEvent.eventAction)
-
-      eventStream.push({
+      const sessionGroup = eventGroup(result.eventAction)
+      const eventStreamItem = {
         label: sessionGroup.timelineDisplay.label,
         value: value > 0 ? value : 1,
         color: sessionGroup.timelineDisplay.color,
         timeSinceStart: this.getSecondsSinceStart(startTime, result.timestamp),
-      })
+        warnings: result['nr.warnings'] ? result['nr.warnings'] : false,
+      }
+      eventStream.push(eventStreamItem)
       prevEvent = result
     })
+
+    // console.info('buildGauge.eventStream', eventStream)
 
     return eventStream
   }
@@ -35,7 +37,7 @@ export default class Timeline extends Component {
   }
 
   render() {
-    const { data, loading, legend, legendClick } = this.props
+    const { data, loading, legend, legendClick, showWarningsOnly } = this.props
 
     const stream = this.buildGauge(data)
 
@@ -48,6 +50,7 @@ export default class Timeline extends Component {
         showLegend={true}
         legend={legend}
         legendClick={legendClick}
+        showWarningsOnly={showWarningsOnly}
       />
     ) : (
       <Stack
