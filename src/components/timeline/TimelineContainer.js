@@ -18,10 +18,29 @@ export default class TimelineContainer extends React.Component {
   }
 
   getData = async eventType => {
-    const { accountId, session, duration } = this.props
-    const { groupingAttribute } = config
+    const {
+      entity: { guid, accountId },
+      filter,
+      session,
+      duration,
+    } = this.props
+    const { searchAttribute, groupingAttribute, linkingAttribute } = config
 
-    const query = `SELECT * from ${eventType} WHERE ${groupingAttribute} = '${session}' ORDER BY timestamp ASC LIMIT 1000 ${duration.since}`
+    let attributeClause = `${groupingAttribute} = '${session}' and ${searchAttribute} = '${filter}'`
+    if (linkingAttribute) {
+      const links = await this.getLinkingData(eventType)
+      if (links && links.length > 0) {
+        let linkedClause = `${linkingAttribute} IN (`
+        links.forEach((link, index) => {
+          linkedClause += `'${link}'`
+          if (index + 1 < links.length) linkedClause += ','
+        })
+        linkedClause += ')'
+        attributeClause = linkedClause
+      }
+    }
+
+    const query = `SELECT * from ${eventType} WHERE entityGuid = '${guid}' and ${attributeClause} ORDER BY timestamp ASC LIMIT MAX ${duration.since}`
     console.debug('timelineDetail.query', query)
 
     const { data } = await NrqlQuery.query({ accountId, query })
@@ -43,6 +62,28 @@ export default class TimelineContainer extends React.Component {
       })
 
     return { result, totalWarnings }
+  }
+
+  getLinkingData = async eventType => {
+    const {
+      entity: { guid, accountId },
+      filter,
+      session,
+      duration,
+    } = this.props
+    const { searchAttribute, groupingAttribute, linkingAttribute } = config
+
+    const query = `SELECT uniques(${linkingAttribute}) from ${eventType} WHERE entityGuid = '${guid}' and ${groupingAttribute} = '${session}' AND ${searchAttribute} = '${filter}' LIMIT MAX ${duration.since}`
+    console.debug('timelineDetail.linkingQuery', query)
+
+    const { data } = await NrqlQuery.query({ accountId, query })
+    console.debug('timelineDetail.linkingQuery data', data)
+
+    const result = []
+    if (data && data.chart.length > 0)
+      data.chart[0].data.forEach(event => result.push(event[linkingAttribute]))
+
+    return result
   }
 
   getWarningConditions = (event, eventType) => {
@@ -224,7 +265,7 @@ export default class TimelineContainer extends React.Component {
               {warnings && (
                 <div className="timline__warning">
                   <div className="timeline__warning-alert">
-                    We found {warningCount} segments that violated expected 
+                    We found {warningCount} segments that violated expected
                     performance thresholds.
                   </div>
                   {/* <div
@@ -257,7 +298,7 @@ export default class TimelineContainer extends React.Component {
 }
 
 TimelineContainer.propTypes = {
-  accountId: PropTypes.number.isRequired,
+  entity: PropTypes.object.isRequired,
   session: PropTypes.string.isRequired,
   filter: PropTypes.string.isRequired,
   duration: PropTypes.object.isRequired,

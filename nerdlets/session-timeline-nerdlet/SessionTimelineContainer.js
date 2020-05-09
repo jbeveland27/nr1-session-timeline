@@ -18,7 +18,7 @@ export default class SessionTimelineContainer extends React.PureComponent {
   }
 
   onClearFilter = () => {
-    this.setState({ filter: '' })
+    this.setState({ filter: '', session: '' })
   }
 
   onChooseSession = session => {
@@ -62,7 +62,7 @@ export default class SessionTimelineContainer extends React.PureComponent {
             </GridItem>
             <GridItem className="timeline-grid-item" columnSpan={8}>
               <TimelineContainer
-                accountId={entity.accountId}
+                entity={entity}
                 filter={filter}
                 session={session}
                 duration={duration}
