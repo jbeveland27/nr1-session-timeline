@@ -1,8 +1,8 @@
 export default {
   searchAttribute: 'userId', // the attribute to locate related events (will search for groupingAttribute) - mandatory
-  event: 'BrowserInteraction', // the root event to build the event sream from - mandatory
+  event: 'BrowserInteraction', // the root event to search against and build the event stream from - mandatory
   groupingAttribute: 'session', // the attribute to group events - mandatory
-  linkingAttribute: 'browserInteractionId', // the attribute to use to identify related events - optional, will use groupingAttribute if not present
+  linkingAttribute: '', // the attribute to use to identify related events - optional, will use groupingAttribute if not present
   timelineEventTypes: [
     // the events to include in the resulting event stream - must include at least one eventType
     // 'PageView',
@@ -36,8 +36,8 @@ export default {
     {
       eventType: 'AjaxRequest',
       thresholds: [
-        { attribute: 'timeToSettle', threshold: 3 },
-        { attribute: 'timeSinceBrowserInteractionStart', threshold: 5 },
+        { attribute: 'timeToSettle', threshold: 10 },
+        { attribute: 'timeSinceBrowserInteractionStart', threshold: 15 },
       ],
     },
     {
