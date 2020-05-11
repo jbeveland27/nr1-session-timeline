@@ -18,10 +18,10 @@ export default class SearchBarContainer extends React.Component {
     console.debug('searchBar.loadData')
 
     const { entity, duration } = this.props
-    const { searchAttribute, event } = config
-    const nrql = `FROM ${event} SELECT uniques(${searchAttribute}) WHERE entityGuid='${entity.guid}' AND ${searchAttribute} like '%${searchTerm}%' and session is not null ${duration.since} `
+    const { searchAttribute, groupingAttribute, event } = config
+    const nrql = `FROM ${event} SELECT uniques(${searchAttribute}) WHERE entityGuid='${entity.guid}' AND ${searchAttribute} like '%${searchTerm}%' and ${groupingAttribute} is not null ${duration.since} `
 
-    console.debug('searchBar.loadData nrql', nrql)
+    console.info('searchBar.loadData nrql', nrql)
 
     const query = `{
       actor {
@@ -60,8 +60,7 @@ export default class SearchBarContainer extends React.Component {
     )
   }
 
-  onSearchInputChange = async ({ target }) => {
-    const { value } = target
+  handleSearchChange = async value => {
     let { loading } = this.state
     let clonedResults = [...this.state.results]
     let clonedCacheResults = [...this.state.cachedResults]
@@ -86,6 +85,16 @@ export default class SearchBarContainer extends React.Component {
       searchTerm: value,
       selectedItem: '',
     })
+  }
+
+  onSearchInputChange = async ({ target }) => {
+    const { value } = target
+    this.handleSearchChange(value)
+  }
+
+  onSearchInputFocus = async ({ target }) => {
+    const { value } = target
+    if (value) this.handleSearchChange(value)
   }
 
   onSelectSearchItem = item => {
@@ -135,6 +144,7 @@ export default class SearchBarContainer extends React.Component {
             <TextField
               className="search__input"
               onChange={this.onSearchInputChange}
+              onFocus={this.onSearchInputFocus}
               placeholder={`Start typing in a ${startCase(searchAttribute)}`}
               autoFocus={true}
             />
