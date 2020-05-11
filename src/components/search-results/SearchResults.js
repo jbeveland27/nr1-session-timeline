@@ -12,15 +12,16 @@ import {
 } from 'nr1'
 import config from '../../config/config'
 
-export default class SearchResults extends React.PureComponent {
+export default class SearchResults extends React.Component {
   flattenData = data => {
+    const { groupingAttribute } = config
     let flattened = []
 
     for (let datum of data) {
       const name = datum.metadata.name
       flattened = flattened.concat(
         datum.data.map(item => {
-          return { date: name, value: item.session }
+          return { date: name, value: item[groupingAttribute] }
         })
       )
     }
@@ -60,16 +61,26 @@ export default class SearchResults extends React.PureComponent {
     chooseSession(item.date, item.value)
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { selected, duration } = this.props
+    const nextSelected = nextProps.selected
+    const nextDuration = nextProps.duration
+
+    console.info('Duration', duration, 'nextDuration', nextDuration)
+    if (selected != nextSelected || duration != nextDuration) return true
+    else return false
+  }
+
   render() {
     const {
       entity: { accountId },
       selected,
       duration,
     } = this.props
-    const { searchAttribute, event } = config
-    const query = `FROM ${event} SELECT uniques(session) WHERE ${searchAttribute}='${selected}' ${duration.since} FACET dateOf(timestamp) `
+    const { groupingAttribute, searchAttribute, event } = config
+    const query = `FROM ${event} SELECT uniques(${groupingAttribute}) WHERE ${searchAttribute}='${selected}' ${duration.since} FACET dateOf(timestamp) `
 
-    console.debug(`searchResults accountId: ${accountId} || query: ${query}`)
+    console.info(`searchResults accountId: ${accountId} || query: ${query}`)
 
     return (
       <React.Fragment>
