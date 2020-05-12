@@ -1,7 +1,7 @@
 [![New Relic Experimental header](https://github.com/newrelic/open-source-office/raw/master/examples/categories/images/Experimental.png)](https://github.com/newrelic/open-source-office/blob/master/examples/categories/index.md#new-relic-experimental)
 
 # Session Timeline
-This nerdlet is designed to show all Browser events recorded over time against a single sesison. This is intended in particular to assist in use cases where a single customer raises an issue over a specific issue or help request. 
+This nerdlet is designed to show all Browser events recorded over time against a single session. This is intended in particular to assist in use cases where a single customer raises an issue over a specific issue or help request. 
 
 ## Features
 * Event stream of all browser events triggered by a specific session
